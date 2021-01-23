@@ -274,9 +274,9 @@ public class RBConfigManager extends CoreConfigManager {
 				BlockFace direction = BlockFace.valueOf(section.getString("direction", "UP"));
 				return new ColumnPlantGrower(maxHeight2, material, direction, instaBreakTouching);
 			case "twisting_vines":
-				return new NetherVineGrower(25, Material.TWISTING_VINES, Material.TWISTING_VINES_PLANT, BlockFace.UP);
+				return new NetherVineGrower(25, Material.TWISTING_VINES_PLANT, Material.TWISTING_VINES, BlockFace.UP);
 			case "weeping_vines":
-				return new NetherVineGrower(25, Material.WEEPING_VINES, Material.WEEPING_VINES_PLANT, BlockFace.DOWN);
+				return new NetherVineGrower(25, Material.WEEPING_VINES_PLANT, Material.WEEPING_VINES, BlockFace.DOWN);
 			case "fruit":
 				Material stemMat = MaterialAPI.getMaterial(section.getString("stem_type"));
 				if (stemMat == null) {
