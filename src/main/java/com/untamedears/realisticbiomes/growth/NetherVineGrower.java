@@ -92,21 +92,27 @@ public class NetherVineGrower extends VerticalGrower {
 	@Override
 	protected int getActualHeight(Block block)
 	{
+		System.out.println("Starting Height Check");
 		Block tipBlock = null;
 		Block baseBlock = null;
 
 		if (block.getType() == tipMaterial)
 		{
 			tipBlock = block;
+			System.out.println("Found Tip Block at: " + block.toString());
 		}
 
 		Block currentWorkingBlock = block;
 
 		if (tipBlock == null) { //Haven't found the tip yet
-			while (true) {
+			System.out.println("Not found Tip, so searching");
+			for (int i = 0; i < 257; i++) {
 				Block blockInGrowthDirection = getRelativeBlock(currentWorkingBlock, getPrimaryGrowthDirection());
-				if (!isPlantMaterial(blockInGrowthDirection.getType())) {
-					tipBlock = currentWorkingBlock;
+				System.out.println("Searching for tip block at: " + blockInGrowthDirection.toString());
+				if (blockInGrowthDirection.getType() == tipMaterial)
+				{
+					tipBlock = blockInGrowthDirection;
+					System.out.println("Found tip block at: " + blockInGrowthDirection.toString());
 					break;
 				}
 
@@ -119,10 +125,12 @@ public class NetherVineGrower extends VerticalGrower {
 			}
 		}
 
-		while (true) {
+		for (int i = 0; i < 257; i++) {
 			Block blockInBaseDirection = getRelativeBlock(currentWorkingBlock, getPrimaryGrowthDirection().getOppositeFace());
+			System.out.println("Searching for lack of base block at: " + blockInBaseDirection.toString());
 			if (!isPlantMaterial(blockInBaseDirection.getType())) {
 				baseBlock = currentWorkingBlock;
+				System.out.println("Found base block at: " + currentWorkingBlock.toString());
 				break;
 			}
 
@@ -134,6 +142,7 @@ public class NetherVineGrower extends VerticalGrower {
 		}
 
 		if (tipBlock != null && baseBlock != null) {
+			System.out.println("Height is: Math.abs(tipBlock.getY() - baseBlock.getY()) + 1");
 			return Math.abs(tipBlock.getY() - baseBlock.getY()) + 1;
 		}
 
