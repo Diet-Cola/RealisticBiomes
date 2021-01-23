@@ -1,5 +1,6 @@
 package com.untamedears.realisticbiomes.utils;
 
+import com.untamedears.realisticbiomes.growth.NetherVineGrower;
 import org.bukkit.Material;
 import org.bukkit.TreeType;
 import org.bukkit.block.Block;
@@ -30,6 +31,11 @@ public class RBUtils {
 		if (isColumnPlant(block.getType())) {
 			return ColumnPlantGrower.getRelativeBlock(block, BlockFace.DOWN);
 		}
+
+		if (isNetherVine(block.getType())) {
+			return NetherVineGrower.getBaseBlock(block);
+		}
+
 		return block;
 	}
 
@@ -71,6 +77,13 @@ public class RBUtils {
 		return mat == Material.CACTUS || mat == Material.SUGAR_CANE  || mat == Material.BAMBOO
 				|| mat == Material.TWISTING_VINES || mat == Material.WEEPING_VINES
 				|| mat == Material.TWISTING_VINES_PLANT || mat == Material.WEEPING_VINES_PLANT;
+	}
+	
+	public static boolean isNetherVine(Material mat) {
+		return mat == Material.TWISTING_VINES
+				|| mat == Material.TWISTING_VINES_PLANT
+				|| mat == Material.WEEPING_VINES
+				|| mat == Material.WEEPING_VINES_PLANT;
 	}
 
 	public static boolean isCrop(Material material) {

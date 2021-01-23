@@ -1,6 +1,7 @@
 package com.untamedears.realisticbiomes.growth;
 
 import com.untamedears.realisticbiomes.model.Plant;
+import com.untamedears.realisticbiomes.utils.RBUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,6 +20,27 @@ public class NetherVineGrower extends VerticalGrower {
 		super(maxHeight, stemMaterial, primaryGrowthDirection, false);
 
 		this.tipMaterial = tipMaterial;
+	}
+
+	public static Block getBaseBlock(Block block) {
+		Material mat = block.getType();
+		BlockFace face = BlockFace.DOWN;
+		if (mat == Material.WEEPING_VINES || mat == Material.WEEPING_VINES_PLANT) {
+			face = BlockFace.UP;
+		} else if (mat == Material.TWISTING_VINES || mat == Material.TWISTING_VINES_PLANT) {
+			face = BlockFace.DOWN;
+		}
+		
+		Block bottomBlock = block;
+		// not actually using this variable, but just having it here as a fail safe
+		for (int i = 0; i < 257; i++) {
+			Block towardsBase = bottomBlock.getRelative(face);
+			if (!RBUtils.isNetherVine(towardsBase.getType())) {
+				break;
+			}
+			bottomBlock = towardsBase;
+		}
+		return bottomBlock;
 	}
 
 	@Override
