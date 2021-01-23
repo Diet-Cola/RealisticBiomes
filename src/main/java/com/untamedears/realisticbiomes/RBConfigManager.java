@@ -273,7 +273,7 @@ public class RBConfigManager extends CoreConfigManager {
 				boolean instaBreakTouching = section.getBoolean("insta_break_toching", false);
 				BlockFace direction = BlockFace.valueOf(section.getString("direction", "UP"));
 				return new ColumnPlantGrower(maxHeight2, material, direction, instaBreakTouching);
-			case "twisting_vine":
+			case "twisting_vines":
 				return new NetherVineGrower(25, Material.TWISTING_VINES, Material.TWISTING_VINES_PLANT, BlockFace.UP);
 			case "weeping_vines":
 				return new NetherVineGrower(25, Material.WEEPING_VINES, Material.WEEPING_VINES_PLANT, BlockFace.DOWN);

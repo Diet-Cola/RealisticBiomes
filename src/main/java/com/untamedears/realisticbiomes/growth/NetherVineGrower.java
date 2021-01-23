@@ -114,6 +114,8 @@ public class NetherVineGrower extends VerticalGrower {
 				if (blockInGrowthDirection.getLocation().getBlockY() > 256 || blockInGrowthDirection.getLocation().getY() < 0) {
 					break;
 				}
+
+				currentWorkingBlock = blockInGrowthDirection;
 			}
 		}
 
@@ -128,6 +130,7 @@ public class NetherVineGrower extends VerticalGrower {
 			if (blockInBaseDirection.getLocation().getBlockY() > 256 || blockInBaseDirection.getLocation().getY() < 0) {
 				break;
 			}
+			currentWorkingBlock = blockInBaseDirection;
 		}
 
 		if (tipBlock != null && baseBlock != null) {
