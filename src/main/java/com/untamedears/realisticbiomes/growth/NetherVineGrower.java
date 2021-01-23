@@ -141,7 +141,11 @@ public class NetherVineGrower extends VerticalGrower {
 			currentWorkingBlock = blockInBaseDirection;
 		}
 
-		if (tipBlock != null && baseBlock != null) {
+		if (baseBlock == null && tipBlock != null) {
+			baseBlock = tipBlock;
+		}
+
+		if (tipBlock != null) {
 			System.out.println("Height is: Math.abs(tipBlock.getY() - baseBlock.getY()) + 1");
 			return Math.abs(tipBlock.getY() - baseBlock.getY()) + 1;
 		}
