@@ -3,6 +3,8 @@ package com.untamedears.realisticbiomes;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.untamedears.realisticbiomes.growth.NetherVineGrower;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -41,6 +43,7 @@ public class PlantLogicManager {
 		// column plants will always hold the plant object in the bottom most block, so
 		// we need
 		// to update that if we just broke one of the upper blocks of a column plant
+		//TODO Change this to support vines
 		if (columnBlocks != null && columnBlocks.contains(block.getType())) {
 			Block sourceColumn = VerticalGrower.getRelativeBlock(block, BlockFace.DOWN);
 			Plant bottomColumnPlant = plantManager.getPlant(sourceColumn);
@@ -130,6 +133,14 @@ public class PlantLogicManager {
 				return;
 			}
 		}
+		if (growthConfig.getGrower() instanceof NetherVineGrower) {
+			BlockFace direction = ((NetherVineGrower) growthConfig.getGrower()).getPrimaryGrowthDirection();
+			if (block.getRelative(direction.getOppositeFace()).getType() == block.getType())
+			{
+				Bukkit.getServer().broadcastMessage("Blocked plant creation as the base block is an existing plant");
+				return;
+			}
+		}
 		Plant plant = new Plant(block.getLocation(), growthConfig);
 		Plant existingPlant = plantManager.getPlant(block);
 		if (existingPlant != null) {
@@ -138,7 +149,7 @@ public class PlantLogicManager {
 		plantManager.putPlant(plant);
 		updateGrowthTime(plant, block);
 	}
-	
+
 	public Block remapColumnBlock(Block block, PlantGrowthConfig growthConfig, Material material) {
 		if (!columnBlocks.contains(block.getType())) {
 			return block;

@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import com.untamedears.realisticbiomes.growth.NetherVineGrower;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
@@ -272,6 +273,10 @@ public class RBConfigManager extends CoreConfigManager {
 				boolean instaBreakTouching = section.getBoolean("insta_break_toching", false);
 				BlockFace direction = BlockFace.valueOf(section.getString("direction", "UP"));
 				return new ColumnPlantGrower(maxHeight2, material, direction, instaBreakTouching);
+			case "twisting_vine":
+				return new NetherVineGrower(25, Material.TWISTING_VINES, Material.TWISTING_VINES_PLANT, BlockFace.UP);
+			case "weeping_vines":
+				return new NetherVineGrower(25, Material.WEEPING_VINES, Material.WEEPING_VINES_PLANT, BlockFace.DOWN);
 			case "fruit":
 				Material stemMat = MaterialAPI.getMaterial(section.getString("stem_type"));
 				if (stemMat == null) {
