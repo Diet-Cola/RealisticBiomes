@@ -1,5 +1,9 @@
 package com.untamedears.realisticbiomes;
 
+import com.untamedears.realisticbiomes.utils.AutoReplant;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginManager;
+
 import com.untamedears.realisticbiomes.listener.AnimalListener;
 import com.untamedears.realisticbiomes.listener.BonemealListener;
 import com.untamedears.realisticbiomes.listener.PlantListener;
@@ -104,6 +108,7 @@ public class RealisticBiomes extends ACivMod {
 		pm.registerEvents(new AnimalListener(animalManager), this);
 		pm.registerEvents(new PlayerListener(growthConfigManager, animalManager, plantManager), this);
 		pm.registerEvents(new BonemealListener(configManager.getBonemealPreventedBlocks()), this);
+		pm.registerEvents(new AutoReplant(), this);
 	}
 
 }
