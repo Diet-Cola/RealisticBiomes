@@ -46,7 +46,7 @@ public class AutoReplant implements Listener {
 		}
 
 		removeSeedFromPlayerInv(inventory, seed);
-		replantCrop(block, seed);
+		replantCrop(block, getCropBlock(seed));
 	}
 
 	/**
@@ -63,6 +63,29 @@ public class AutoReplant implements Listener {
 				return Material.POTATO;
 			case BEETROOTS:
 				return Material.BEETROOT;
+			case NETHER_WART:
+				return Material.NETHER_WART;
+			default:
+				return null;
+		}
+	}
+
+	/**
+	 * We have to convert the item back to the actual crop block in the case of wheat/carrots/potatoes etc since
+	 * POTATO is not POTATOES
+	 * @param material Seed Material
+	 * @return Crop of Seed
+	 */
+	public Material getCropBlock(Material material) {
+		switch (material) {
+			case POTATO:
+				return Material.POTATOES;
+			case CARROT:
+				return Material.CARROTS;
+			case WHEAT_SEEDS:
+				return Material.WHEAT;
+			case BEETROOT_SEEDS:
+				return Material.BEETROOTS;
 			case NETHER_WART:
 				return Material.NETHER_WART;
 			default:
