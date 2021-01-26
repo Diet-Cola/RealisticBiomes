@@ -1,6 +1,7 @@
 package com.untamedears.realisticbiomes.utils;
 
 import com.untamedears.realisticbiomes.RealisticBiomes;
+import com.untamedears.realisticbiomes.model.Plant;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -13,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import vg.civcraft.mc.civmodcore.api.MaterialAPI;
 import vg.civcraft.mc.civmodcore.playersettings.PlayerSettingAPI;
 import vg.civcraft.mc.civmodcore.playersettings.gui.MenuSection;
 import vg.civcraft.mc.civmodcore.playersettings.impl.BooleanSetting;
@@ -31,10 +31,8 @@ public class AutoReplant implements Listener {
 		Block block = event.getBlock();
 		Player player = event.getPlayer();
 		PlayerInventory inventory = player.getInventory();
-		if (!getToggleAutoReplant(player.getUniqueId())) {
-			return;
-		}
-		Material seed = getSeed(block.getType());
+
+		Material seed = getSeed(block);
 		if (seed == null) {
 			return;
 		}
@@ -44,15 +42,17 @@ public class AutoReplant implements Listener {
 		if (!playerHasSeeds(inventory, seed)) {
 			return;
 		}
-		replantCrop(block, getCropBlock(seed), inventory);
+
+		removeSeedFromPlayerInv(inventory, seed);
+		replantCrop(block, seed);
 	}
 
 	/**
-	 * Takes a Material and checks if its a crop, returns seeds if it is, null if it isn't.
+	 * Takes a block and checks if its a crop, returns seeds if it is, null if it isn't.
 	 * @return Seed Material
 	 */
-	public Material getSeed(Material material) {
-		switch (material) {
+	public Material getSeed(Block block) {
+		switch (block.getType()) {
 			case WHEAT:
 				return Material.WHEAT_SEEDS;
 			case CARROTS:
@@ -61,29 +61,6 @@ public class AutoReplant implements Listener {
 				return Material.POTATO;
 			case BEETROOTS:
 				return Material.BEETROOT;
-			case NETHER_WART:
-				return Material.NETHER_WART;
-			default:
-				return null;
-		}
-	}
-
-	/**
-	 * We have to convert the item back to the actual crop block in the case of wheat/carrots/potatoes etc since
-	 * POTATO is not POTATOES
-	 * @param material Seed Material
-	 * @return Crop of Seed
-	 */
-	public Material getCropBlock(Material material) {
-		switch (material) {
-			case POTATO:
-				return Material.POTATOES;
-			case CARROT:
-				return Material.CARROTS;
-			case WHEAT_SEEDS:
-				return Material.WHEAT;
-			case BEETROOT_SEEDS:
-				return Material.BEETROOTS;
 			case NETHER_WART:
 				return Material.NETHER_WART;
 			default:
@@ -115,20 +92,14 @@ public class AutoReplant implements Listener {
 	 * @param block Replant location
 	 * @param seed Seed to replant
 	 */
-	public void replantCrop(Block block, Material seed, PlayerInventory inventory) {
+	public void replantCrop(Block block, Material seed) {
 		Bukkit.getScheduler().runTaskLater(RealisticBiomes.getInstance(), () -> {
-			if (!MaterialAPI.isAir(block.getType())) {
-				return;
-			}
-			if (!removeSeedFromPlayerInv(inventory, getSeed(seed))){
-				return;
-			}
 			block.setType(seed);
 			RealisticBiomes.getInstance().getPlantLogicManager().handlePlantCreation(block, new ItemStack(seed));
 		},5L);
 	}
 
-	public boolean removeSeedFromPlayerInv(PlayerInventory inventory, Material seed) {
+	public void removeSeedFromPlayerInv(PlayerInventory inventory, Material seed) {
 		ItemStack[] items = inventory.getContents();
 		for (ItemStack item : items) {
 			if (item == null) {
@@ -136,10 +107,8 @@ public class AutoReplant implements Listener {
 			}
 			if (item.getType() == seed) {
 				item.setAmount(item.getAmount() - 1);
-				return true;
 			}
 		}
-		return false;
 	}
 
 	public boolean isFullyGrown(Block block) {
