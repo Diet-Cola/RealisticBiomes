@@ -31,7 +31,9 @@ public class AutoReplant implements Listener {
 		Block block = event.getBlock();
 		Player player = event.getPlayer();
 		PlayerInventory inventory = player.getInventory();
-
+		if (!getToggleAutoReplant(player.getUniqueId())) {
+			return;
+		}
 		Material seed = getSeed(block);
 		if (seed == null) {
 			return;
