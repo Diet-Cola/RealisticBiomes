@@ -1,7 +1,6 @@
 package com.untamedears.realisticbiomes.utils;
 
 import com.untamedears.realisticbiomes.RealisticBiomes;
-import com.untamedears.realisticbiomes.model.Plant;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -14,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import vg.civcraft.mc.civmodcore.api.MaterialAPI;
 import vg.civcraft.mc.civmodcore.playersettings.PlayerSettingAPI;
 import vg.civcraft.mc.civmodcore.playersettings.gui.MenuSection;
 import vg.civcraft.mc.civmodcore.playersettings.impl.BooleanSetting;
@@ -34,7 +34,7 @@ public class AutoReplant implements Listener {
 		if (!getToggleAutoReplant(player.getUniqueId())) {
 			return;
 		}
-		Material seed = getSeed(block);
+		Material seed = getSeed(block.getType());
 		if (seed == null) {
 			return;
 		}
@@ -44,17 +44,15 @@ public class AutoReplant implements Listener {
 		if (!playerHasSeeds(inventory, seed)) {
 			return;
 		}
-
-		removeSeedFromPlayerInv(inventory, seed);
-		replantCrop(block, getCropBlock(seed));
+		replantCrop(block, getCropBlock(seed), inventory);
 	}
 
 	/**
-	 * Takes a block and checks if its a crop, returns seeds if it is, null if it isn't.
+	 * Takes a Material and checks if its a crop, returns seeds if it is, null if it isn't.
 	 * @return Seed Material
 	 */
-	public Material getSeed(Block block) {
-		switch (block.getType()) {
+	public Material getSeed(Material material) {
+		switch (material) {
 			case WHEAT:
 				return Material.WHEAT_SEEDS;
 			case CARROTS:
@@ -117,14 +115,20 @@ public class AutoReplant implements Listener {
 	 * @param block Replant location
 	 * @param seed Seed to replant
 	 */
-	public void replantCrop(Block block, Material seed) {
+	public void replantCrop(Block block, Material seed, PlayerInventory inventory) {
 		Bukkit.getScheduler().runTaskLater(RealisticBiomes.getInstance(), () -> {
+			if (!MaterialAPI.isAir(block.getType())) {
+				return;
+			}
+			if (!removeSeedFromPlayerInv(inventory, getSeed(seed))){
+				return;
+			}
 			block.setType(seed);
 			RealisticBiomes.getInstance().getPlantLogicManager().handlePlantCreation(block, new ItemStack(seed));
 		},5L);
 	}
 
-	public void removeSeedFromPlayerInv(PlayerInventory inventory, Material seed) {
+	public boolean removeSeedFromPlayerInv(PlayerInventory inventory, Material seed) {
 		ItemStack[] items = inventory.getContents();
 		for (ItemStack item : items) {
 			if (item == null) {
@@ -132,8 +136,10 @@ public class AutoReplant implements Listener {
 			}
 			if (item.getType() == seed) {
 				item.setAmount(item.getAmount() - 1);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	public boolean isFullyGrown(Block block) {
