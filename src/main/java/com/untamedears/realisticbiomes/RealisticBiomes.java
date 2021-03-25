@@ -111,4 +111,3 @@ public class RealisticBiomes extends ACivMod {
 	}
 
 }
->>>>>>> auto_replant
