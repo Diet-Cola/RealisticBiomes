@@ -11,8 +11,7 @@ import com.untamedears.realisticbiomes.listener.PlayerListener;
 import com.untamedears.realisticbiomes.model.Plant;
 import com.untamedears.realisticbiomes.model.RBChunkCache;
 import com.untamedears.realisticbiomes.model.RBDAO;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.PluginManager;
+
 import vg.civcraft.mc.civmodcore.ACivMod;
 import vg.civcraft.mc.civmodcore.locations.chunkmeta.api.BlockBasedChunkMetaView;
 import vg.civcraft.mc.civmodcore.locations.chunkmeta.api.ChunkMetaAPI;
@@ -112,3 +111,4 @@ public class RealisticBiomes extends ACivMod {
 	}
 
 }
+>>>>>>> auto_replant
