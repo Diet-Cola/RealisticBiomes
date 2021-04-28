@@ -113,7 +113,7 @@ public class RealisticBiomes extends ACivMod {
 
 		rbTaskQueue = new LinkedBlockingQueue<>();
 		taskQueueTask = Bukkit.getScheduler().runTaskTimer(RealisticBiomes.getInstance(), () -> {
-			long end = System.currentTimeMillis() + 20;
+			long end = System.currentTimeMillis() + configManager.getMaxTaskTime();
 			while (!rbTaskQueue.isEmpty() && System.currentTimeMillis() < end) {
 				rbTaskQueue.poll().run();
 			}

@@ -3,6 +3,9 @@ cache_entire_database: true
  # Set to true if you want tapping a plant with bonemeal to double it.
 allow_tallplant_replication: true
 
+# Max amount of ms a task can run for before being offloaded to next tick
+max_task_time: 20
+
  # categories of biomes
 biome_aliases:
   water:

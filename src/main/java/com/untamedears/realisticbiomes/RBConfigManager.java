@@ -58,6 +58,8 @@ public class RBConfigManager extends CoreConfigManager {
 
 	private List<Material> bonemealPreventedBlocks;
 
+	private int maxTaskTime;
+
 	public RBConfigManager(ACivMod plugin) {
 		super(plugin);
 	}
@@ -76,6 +78,10 @@ public class RBConfigManager extends CoreConfigManager {
 
 	public boolean hasPersistentGrowthConfigs() {
 		return hasPersistentGrowth;
+	}
+
+	public int getMaxTaskTime() {
+		return maxTaskTime;
 	}
 
 	private Map<String, List<Biome>> loadBiomeAliases(ConfigurationSection config) {
@@ -125,6 +131,7 @@ public class RBConfigManager extends CoreConfigManager {
 		List<LStepConfig> rawConfigs = parseRawLStepConfigs(config.getConfigurationSection("l_steps"));
 		lTrees = parseLTrees(config.getConfigurationSection("l_trees"), rawConfigs);
 		bonemealPreventedBlocks = parseMaterialList(config, "no_bonemeal_blocks");
+		maxTaskTime = config.getInt("max_task_time", 20);
 		return true;
 	}
 
